@@ -9,15 +9,20 @@ pipeline {
 		stage('Test') {
 		steps {
 			echo 'TEST'
-			sh '/bin/nc -vz localhost 22'
+			sh 'docker reun --rm --name app -p 80:80 app:test'
 			sh '/bin/nc -vz localhost 8080'
+			}
+			post {
+			    always {
+			        sh 'docker container stop app'
+			    }
 			}
 		}
 		stage('Deploy - Push registry') {
 		steps {
 			echo 'DEPLOY'
-			sh 'docker tag app:test app:stable'
-			sh 'docker push app:test app:stable'
+			sh 'docker tag app:test solidge0/app:stable'
+			sh 'docker push  solidge0/app:stable'
 			}
 		}
 	}
