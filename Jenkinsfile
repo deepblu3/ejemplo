@@ -8,14 +8,11 @@ pipeline {
 		}
 		stage('Test') {
 		steps {
-			echo 'TEST'
-			sh 'docker run --name app -d -p 80:80 app:test'
-			sh '/bin/nc -vz localhost 80'
-			}
-			post {
-			    always {
-			        sh 'docker stop app'
-			    }
+                echo 'TEST'
+                sh 'docker run --name app -d -p 80:80 app:test'
+                sh '/bin/nc -vz localhost 80'
+                sh 'docker stop app'
+		    }
 			}
 		}
 		stage('Deploy - Push registry') {
