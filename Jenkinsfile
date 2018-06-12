@@ -18,7 +18,7 @@ pipeline {
 		stage('Deploy - Push registry') {
 		steps {
 		    echo 'DEPLOY'
-		    withCredentials([usernamePassword(credentialsId: '9d97489d-bf4c-4be5-9e1d-d2a910ee94ef', passwordVariable: 'pass_docker', usernameVariable: 'user_docker')]) {
+		    withCredentials([usernamePassword(credentialsId: 'solidge0_docker', passwordVariable: 'pass_docker', usernameVariable: 'user_docker')]) {
             	sh 'docker tag app:test solidge0/app:stable'
             	sh 'docker push  solidge0/app:stable'
             }
