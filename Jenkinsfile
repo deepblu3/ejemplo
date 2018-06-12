@@ -9,8 +9,8 @@ pipeline {
 		stage('Test') {
 		steps {
 			echo 'TEST'
-			sh 'docker run --rm --name app -id -p 80:80 app:test'
-			sh '/bin/nc -vz localhost 8080'
+			sh 'docker run --name app -d -p 80:80 app:test'
+			sh '/bin/nc -vz localhost 80'
 			}
 			post {
 			    always {
@@ -20,9 +20,12 @@ pipeline {
 		}
 		stage('Deploy - Push registry') {
 		steps {
-			echo 'DEPLOY'
-			sh 'docker tag app:test solidge0/app:stable'
-			sh 'docker push  solidge0/app:stable'
+		    echo 'DEPLOY'
+		    withCredentials([usernamePassword(credentialsId: 'solidge0_docker', passwordVariable: 'pass', usernameVariable: 'user')]) {
+            	sh 'docker tag app:test solidge0/app:stable'
+            	sh 'docker push  solidge0/app:stable'
+            }
+
 			}
 		}
 	}
